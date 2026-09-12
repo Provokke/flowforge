@@ -1,0 +1,22 @@
+{
+  "name": "flowforge",
+  "version": "0.1.0",
+  "description": "Zero-dependency DAG workflow engine with retries, fallbacks, templating and plugins",
+  "type": "module",
+  "bin": {
+    "flowforge": "src/cli.ts"
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "start": "node src/cli.ts",
+    "test": "node --test \"test/*.test.ts\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "@types/node": "^24.0.0"
+  }
+}
