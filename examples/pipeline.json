@@ -1,0 +1,34 @@
+{
+  "name": "research-pipeline",
+  "concurrency": 3,
+  "vars": { "topic": "directed acyclic graphs" },
+  "tasks": [
+    { "id": "topic", "type": "echo", "with": { "value": "${vars.topic}" } },
+    {
+      "id": "outline",
+      "type": "llm",
+      "needs": ["topic"],
+      "retries": 1,
+      "fallback": "outline_local",
+      "with": { "provider": "mock", "model": "big-model", "prompt": "Outline an article about ${tasks.topic.output}" }
+    },
+    {
+      "id": "outline_local",
+      "type": "llm",
+      "with": { "provider": "mock", "model": "small-local-model", "prompt": "Short outline about ${tasks.topic.output}" }
+    },
+    { "id": "stats", "type": "shell", "needs": ["topic"], "with": { "cmd": "node -e \"console.log(process.argv[1].length)\" \"${tasks.topic.output}\"" } },
+    {
+      "id": "draft",
+      "type": "llm",
+      "needs": ["outline", "stats"],
+      "with": {
+        "provider": "mock",
+        "model": "writer",
+        "maxContextTokens": 500,
+        "context": ["${tasks.outline.output}", "topic length: ${tasks.stats.output}"],
+        "prompt": "Write the draft."
+      }
+    }
+  ]
+}
