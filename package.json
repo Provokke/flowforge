@@ -1,22 +1,59 @@
 {
   "name": "flowforge",
-  "version": "0.1.0",
-  "description": "Zero-dependency DAG workflow engine with retries, fallbacks, templating and plugins",
+  "version": "0.3.0",
+  "description": "A DAG-based workflow engine for composing LLM and shell steps into repeatable pipelines",
   "type": "module",
   "bin": {
-    "flowforge": "src/cli.ts"
+    "flowforge": "./dist/cli.js"
   },
   "engines": {
     "node": ">=22.18"
   },
   "scripts": {
-    "start": "node src/cli.ts",
-    "test": "node --test \"test/*.test.ts\"",
-    "typecheck": "tsc --noEmit"
+    "start": "tsx src/cli.ts",
+    "test": "tsx --test test/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.build.json",
+    "prepublishOnly": "npm run build"
   },
   "license": "MIT",
   "devDependencies": {
     "typescript": "^7.0.2",
     "@types/node": "^24.0.0"
-  }
+  },
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Provokke/flowforge.git"
+  },
+  "author": "Provokke",
+  "keywords": [
+    "workflow",
+    "dag",
+    "pipeline",
+    "llm",
+    "automation",
+    "cli"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/engine.d.ts",
+      "default": "./dist/engine.js"
+    },
+    "./graph": {
+      "types": "./dist/graph.d.ts",
+      "default": "./dist/graph.js"
+    },
+    "./template": {
+      "types": "./dist/template.d.ts",
+      "default": "./dist/template.js"
+    }
+  },
+  "main": "./dist/engine.js",
+  "types": "./dist/engine.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ]
 }
